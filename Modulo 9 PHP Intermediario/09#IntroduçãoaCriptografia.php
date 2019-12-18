@@ -10,5 +10,5 @@
 
     echo "Texto Original: ".$nome2."<br>";
     echo "texto Decodificado: ".base64_decode($nome2)."<br>";
-    
+     
 ?>
