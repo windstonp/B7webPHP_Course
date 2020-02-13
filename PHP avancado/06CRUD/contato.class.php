@@ -3,7 +3,6 @@ class Contato{
   private $pdo;
   public function __construct(){
     $this->pdo = new PDO("mysql:dbname=crudoo;host=localhost","root","");
-    
   }
   public function adicionar($email,$nome = ''){
     if ($this->existeEmail($email) == false){
@@ -30,7 +29,7 @@ class Contato{
     }
   }
   public function getAll(){
-    $sql = "SELECT nome,email FROM contatos";
+    $sql = "SELECT id,nome,email FROM contatos  ORDER BY id";
     $prepare = $this->pdo->query($sql);
     if($prepare->rowCount()>0){
       return $prepare->fetchAll();
@@ -49,17 +48,18 @@ class Contato{
       return false;
     }
   }
-  Public function Editar($email,$nome){
-    if ($this->existeEmail($email)){
-      $sql = "UPDATE contatos set nome = :nome WHERE email = :email";
+  Public function Editar($email,$nome,$id){
+      if($this->existeEmail($email) == false){
+      $sql = "UPDATE contatos SET nome = :nome , email = :email WHERE id = :id;";
       $prepare = $this->pdo->prepare($sql);
+      $prepare->bindValue(":id",$id);
       $prepare->bindValue(":nome",$nome);
       $prepare->bindValue(":email",$email);
       $prepare->execute();
       return true;
-    }else{
-      return false;
-    }
+      }else{
+        return false;
+      }
   }
   private function existeEmail($email){
     $sql = "SELECT id,nome,email FROM contatos WHERE email = :email";
